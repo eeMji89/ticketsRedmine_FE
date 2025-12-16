@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Redmine · Envío de Tickets</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- HEADBAR -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <span class="logo" aria-hidden="true"></span>
+        <strong>Envió de Tickets por medio de API hacia Redmine</strong>
+      </div>
+      <nav class="meta">
+        <span>UNITEC</span>
+      </nav>
+    </div>
+  </header>
+
+<main class="wrap content">
+    <section class="card">
+      <h1>Nueva petición</h1>
+
+      <form class="form" id="ticketForm">
+        
+          <label class="field">
+            <span>Tipo</span>
+            <select id="tipo" required>
+              <option value="" disabled selected>Selecciona un tipo</option>
+              <option value="bug">Bug</option>
+              <option value="support">Soporte</option>
+              <option value="feature">Mejora</option>
+              <option value="otro">Otro</option>
+            </select>
+          </label>
+
+          <label class="field" id="otroWrap" style="display:none;">
+            <span>Especifica el tipo</span>
+            <input id="otroTipo" type="text" placeholder="Ej: Solicitud administrativa" />
+          </label>
+        
+
+        <label class="field">
+          <span>Asunto</span>
+          <input id="asunto" type="text" placeholder="Título corto del ticket" required />
+        </label>
+
+        <label class="field">
+          <span>Descripción</span>
+          <textarea id="descripcion" rows="6" placeholder="Describe el problema o solicitud"></textarea>
+        </label>
+
+        <!-- la prioridad se deriva del tipo -->
+        <input type="hidden" id="prioridad" name="prioridad" value="normal" />
+
+        <div class="actions">
+          <button type="button" class="btn primary">Enviar ticket</button>
+          <button type="reset" class="btn ghost">Limpiar</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bottombar">
+    <div class="wrap">
+      <span class="class">Gobernabilidad de Tecnologías de Información · UNITEC</span>
+    </div>
+  </footer>
+
+  <script>
+    // UI: mostrar/ocultar si se selecciona otro tipo
+    const tipo = document.getElementById('tipo');
+    const otroWrap = document.getElementById('otroWrap');
+    const otroTipo = document.getElementById('otroTipo');
+    const prioridad = document.getElementById('prioridad');
+
+    const prioridadPorTipo = {
+      bug: "alta",      
+      support: "normal",
+      feature: "baja",
+      otro: "alta"
+    };
+
+    function syncUI() {
+      const v = tipo.value;
+      const esOtro = v === 'otro';
+
+      otroWrap.style.display = esOtro ? 'block' : 'none';
+      otroTipo.required = esOtro;
+      if (!esOtro) otroTipo.value = '';
+
+
+      prioridad.value = prioridadPorTipo[v] || "normal";
+    }
+
+    tipo.addEventListener('change', syncUI);
+  </script>
+</body>
+</html>
