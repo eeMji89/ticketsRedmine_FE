@@ -27,9 +27,15 @@
       <h1>Nueva petición</h1>
 
         <form class="form" id="ticketForm">
-            <input type="hidden" id="project_id" name="project_id" value="proyecto-prueba" />
+           <!--  <input type="hidden" id="project_id" name="project_id" value="proyecto-prueba" /> -->
             <input type="hidden" id="tracker_id" name="tracker_id" value="" />
             <input type="hidden" id="priority_id" name="priority_id" value="" />
+            <label class="field">
+              <span>Proyecto</span>
+              <select id="project_id" required>
+                <option value="" disabled selected>Cargando proyectos...</option>
+              </select>
+            </label>
 
             <label class="field">
                 <span>Tipo</span>

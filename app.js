@@ -24,6 +24,55 @@ function hideMsg() {
   msgEl.textContent = "";
 }
 
+async function fetchProjects() {
+  const res = await fetch(`${API_BASE}/projects`);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(data?.error || `HTTP ${res.status}`);
+  }
+  return data;
+}
+
+function fillProjectSelect(projectsData) {
+  const projects = projectsData?.projects || [];
+  const select = document.getElementById("project_id");
+  if (!select) return;
+
+  select.innerHTML = "";
+
+  const opt0 = document.createElement("option");
+  opt0.value = "";
+  opt0.textContent = "Selecciona un proyecto";
+  opt0.disabled = true;
+  opt0.selected = true;
+  select.appendChild(opt0);
+
+  for (const p of projects) {
+    const opt = document.createElement("option");
+    opt.value = p.identifier;
+    opt.textContent = p.name;
+    select.appendChild(opt);
+  }
+
+}
+
+async function loadProjects() {
+  try {
+    const data = await fetchProjects();
+    fillProjectSelect(data);
+  } catch (err) {
+    showMsg(`No se pudieron cargar proyectos. ${err.message}`, "err");
+    const select = document.getElementById("project_id");
+    if (select) {
+      select.innerHTML = `<option value="" disabled selected>Error cargando proyectos</option>`;
+    }
+  }
+}
+
+// Cargar proyectos al abrir la página
+loadProjects();
+
+
 async function createIssue(payload) {
   const res = await fetch(`${API_BASE}/issues`, {
     method: "POST",
