@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<script src="app.js"></script>
+
 
 <body class="page">
   <!-- HEADBAR -->
@@ -38,7 +38,6 @@
                 <option value="error">Errores</option>
                 <option value="task">Tareas</option>
                 <option value="support">Soporte</option>
-                <!-- <option value="otro">Otro</option> -->
                 </select>
             </label>
 
@@ -70,37 +69,31 @@
   </footer>
 
   <script>
-    // Trackers:
-    // 1 = Errores, 2 = Tareas, 3 = Soporte
-    const trackerPorTipo = {
-      Error: 1,
-      Tarea: 2,
-      Soporte: 3,
-      
-    };
+  const trackerPorTipo = {
+    error: 1,
+    task: 2,
+    support: 3
+  };
 
-    // Prioridades (según tu JSON):
-    // 1=Baja, 2=Normal, 3=Alta, 4=Urgente, 5=Inmediata
-    const prioridadPorTipo = {
-      Error: 3,      
-      Tarea: 2,     
-      Soporte: 2,  
-      
-    };
+  const prioridadPorTipo = {
+    error: 3,
+    task: 2,
+    support: 2
+  };
 
-    const tipo = document.getElementById('tipo');
-    const tracker_id = document.getElementById('tracker_id');
-    const priority_id = document.getElementById('priority_id');
+  const tipo = document.getElementById('tipo');
+  const tracker_id = document.getElementById('tracker_id');
+  const priority_id = document.getElementById('priority_id');
 
-    function syncInternals() {
-      const v = tipo.value;
-      tracker_id.value = trackerPorTipo[v] ?? "";
-      priority_id.value = prioridadPorTipo[v] ?? 2; // default Normal
-    }
+  function syncInternals() {
+    const v = tipo.value;
+    tracker_id.value = trackerPorTipo[v] ?? "";
+    priority_id.value = prioridadPorTipo[v] ?? 2;
+  }
 
-    tipo.addEventListener('change', syncInternals);
-    // por si el navegador recuerda el select
-    syncInternals();
-  </script>
+  tipo.addEventListener('change', syncInternals);
+  syncInternals();
+</script>
+  <script src="app.js" defer></script>
 </body>
 </html>
