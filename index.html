@@ -6,61 +6,59 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <!-- HEADBAR -->
-  <header class="topbar">
-    <div class="wrap">
-      <div class="brand">
-        <span class="logo" aria-hidden="true"></span>
-        <strong>Envió de Tickets por medio de API hacia Redmine</strong>
-      </div>
-      <nav class="meta">
-        <span>UNITEC</span>
-      </nav>
-    </div>
-  </header>
+<script src="app.js"></script>
 
-<main class="wrap content">
+<body class="page">
+  <!-- HEADBAR -->
+    <header class="topbar">
+        <div class="wrap">
+            <div class="brand">
+                <span class="logo" aria-hidden="true"></span>
+                <strong>Envío de Tickets por medio de API hacia Redmine</strong>
+            </div>
+            <nav class="meta">
+                <span>UNITEC</span>
+            </nav>
+        </div>
+    </header>
+
+  <main class="wrap content">
     <section class="card">
       <h1>Nueva petición</h1>
 
-      <form class="form" id="ticketForm">
-        
-          <label class="field">
-            <span>Tipo</span>
-            <select id="tipo" required>
-              <option value="" disabled selected>Selecciona un tipo</option>
-              <option value="bug">Bug</option>
-              <option value="support">Soporte</option>
-              <option value="feature">Mejora</option>
-              <option value="otro">Otro</option>
-            </select>
-          </label>
+        <form class="form" id="ticketForm">
+            <input type="hidden" id="project_id" name="project_id" value="proyecto-prueba" />
+            <input type="hidden" id="tracker_id" name="tracker_id" value="" />
+            <input type="hidden" id="priority_id" name="priority_id" value="" />
 
-          <label class="field" id="otroWrap" style="display:none;">
-            <span>Especifica el tipo</span>
-            <input id="otroTipo" type="text" placeholder="Ej: Solicitud administrativa" />
-          </label>
-        
+            <label class="field">
+                <span>Tipo</span>
+                <select id="tipo" required>
+                <option value="" disabled selected>Selecciona un tipo</option>
+                <option value="error">Errores</option>
+                <option value="task">Tareas</option>
+                <option value="support">Soporte</option>
+                <!-- <option value="otro">Otro</option> -->
+                </select>
+            </label>
 
-        <label class="field">
-          <span>Asunto</span>
-          <input id="asunto" type="text" placeholder="Título corto del ticket" required />
-        </label>
+            <label class="field">
+                <span>Asunto</span>
+                <input id="subject" type="text" placeholder="Título corto del ticket" required />
+            </label>
 
-        <label class="field">
-          <span>Descripción</span>
-          <textarea id="descripcion" rows="6" placeholder="Describe el problema o solicitud"></textarea>
-        </label>
+            <label class="field">
+                <span>Descripción</span>
+                <textarea id="description" rows="6" placeholder="Describe el problema o solicitud"></textarea>
+            </label>
 
-        <!-- la prioridad se deriva del tipo -->
-        <input type="hidden" id="prioridad" name="prioridad" value="normal" />
+            <div class="actions">
+                <button type="button" class="btn primary" id="btnEnviar">Enviar ticket </button>
+                <button type="reset" class="btn ghost">Limpiar</button>
+            </div>
+            <div id="msg" class="msg" style="display:none;"></div>
 
-        <div class="actions">
-          <button type="button" class="btn primary">Enviar ticket</button>
-          <button type="reset" class="btn ghost">Limpiar</button>
-        </div>
-      </form>
+       </form>
     </section>
   </main>
 
@@ -72,32 +70,37 @@
   </footer>
 
   <script>
-    // UI: mostrar/ocultar si se selecciona otro tipo
-    const tipo = document.getElementById('tipo');
-    const otroWrap = document.getElementById('otroWrap');
-    const otroTipo = document.getElementById('otroTipo');
-    const prioridad = document.getElementById('prioridad');
-
-    const prioridadPorTipo = {
-      bug: "alta",      
-      support: "normal",
-      feature: "baja",
-      otro: "alta"
+    // Trackers:
+    // 1 = Errores, 2 = Tareas, 3 = Soporte
+    const trackerPorTipo = {
+      Error: 1,
+      Tarea: 2,
+      Soporte: 3,
+      
     };
 
-    function syncUI() {
+    // Prioridades (según tu JSON):
+    // 1=Baja, 2=Normal, 3=Alta, 4=Urgente, 5=Inmediata
+    const prioridadPorTipo = {
+      Error: 3,      
+      Tarea: 2,     
+      Soporte: 2,  
+      
+    };
+
+    const tipo = document.getElementById('tipo');
+    const tracker_id = document.getElementById('tracker_id');
+    const priority_id = document.getElementById('priority_id');
+
+    function syncInternals() {
       const v = tipo.value;
-      const esOtro = v === 'otro';
-
-      otroWrap.style.display = esOtro ? 'block' : 'none';
-      otroTipo.required = esOtro;
-      if (!esOtro) otroTipo.value = '';
-
-
-      prioridad.value = prioridadPorTipo[v] || "normal";
+      tracker_id.value = trackerPorTipo[v] ?? "";
+      priority_id.value = prioridadPorTipo[v] ?? 2; // default Normal
     }
 
-    tipo.addEventListener('change', syncUI);
+    tipo.addEventListener('change', syncInternals);
+    // por si el navegador recuerda el select
+    syncInternals();
   </script>
 </body>
 </html>

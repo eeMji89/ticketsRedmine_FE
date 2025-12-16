@@ -177,5 +177,27 @@ input:focus, select:focus, textarea:focus{
   text-align:center;
   color: var(--muted);
 }
-.sep{ opacity:.4 }
-.class{ font-weight:900; color: var(--red); }
+.sep{ 
+    opacity:.4
+ }
+.class{ 
+    font-weight:900; color: var(--red); 
+}
+
+.msg{
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 800;
+  border: 1px solid var(--border);
+}
+.msg.ok{
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+.msg.err{
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
